@@ -8,7 +8,7 @@ from core.models import UserMetadata
 class SignupViewTests(TestCase):
     def test_signup_creates_user_and_metadata(self):
         response = self.client.post(
-            reverse("signup"),
+            reverse("accounts:signup"),
             {
                 "username": "newuser",
                 "email": "new@example.com",
@@ -33,7 +33,7 @@ class SignupViewTests(TestCase):
 
     def test_signup_renders_errors_when_invalid(self):
         response = self.client.post(
-            reverse("signup"),
+            reverse("accounts:signup"),
             {
                 "username": "anotheruser",
                 "email": "another@example.com",

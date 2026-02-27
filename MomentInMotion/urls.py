@@ -3,5 +3,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('', include('core.urls')),  # point root URL to core app
 ]

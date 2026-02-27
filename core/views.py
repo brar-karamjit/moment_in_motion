@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import requests
-import json
 import os
 import logging
-from .forms import *
-from django.contrib.auth.models import User
-from django.contrib.auth import login
+
+from .forms import UserProfileForm
 from core.models import UserMetadata     
 
 
@@ -14,20 +12,6 @@ from core.models import UserMetadata
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # stored in environment variable
 logger = logging.getLogger(__name__)
-
-
-def signup(request):
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect("home")
-    else:
-        form = SignUpForm()
-    return render(request, "core/signup.html", {"form": form})
-
-
 def get_suggestion(user, metadata, weather, latitude, longitude):
     user_name = f"{user.first_name} {user.last_name}".strip() or user.username or "Explorer"
     interests = getattr(metadata, "interests", None) or "no specific interest"

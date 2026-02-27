@@ -31,10 +31,10 @@
                     <li><a href="{% url 'home' %}" class="nav-link">Dashboard</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
-                        <li><a href="{% url 'logout' %}" class="nav-link nav-link--contrast">Logout</a></li>
+                        <li><a href="{% url 'accounts:logout' %}" class="nav-link nav-link--contrast">Logout</a></li>
                     {% else %}
-                        <li><a href="{% url 'login' %}" class="nav-link">Login</a></li>
-                        <li><a href="{% url 'signup' %}" class="nav-link nav-link--contrast">Create account</a></li>
+                        <li><a href="{% url 'accounts:login' %}" class="nav-link">Login</a></li>
+                        <li><a href="{% url 'accounts:signup' %}" class="nav-link nav-link--contrast">Create account</a></li>
                     {% endif %}
                 </ul>
             </nav>
