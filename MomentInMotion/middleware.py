@@ -1,22 +1,35 @@
 from django.conf import settings
+from django.urls import set_script_prefix
 
 
 class ForwardedPrefixMiddleware:
-    """Respect reverse proxy prefix headers for correct URL generation."""
+    """Honour the X-Forwarded-Prefix header (or FORCE_SCRIPT_NAME) so that
+    reverse(), {% url %}, request.path, and login redirects all include
+    the sub-path prefix set by the reverse-proxy / Ingress."""
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        prefix = request.META.get("HTTP_X_FORWARDED_PREFIX") or settings.FORCE_SCRIPT_NAME
+        prefix = (
+            request.META.get("HTTP_X_FORWARDED_PREFIX")
+            or settings.FORCE_SCRIPT_NAME
+            or ""
+        )
         if prefix:
-            if not prefix.startswith("/"):
-                prefix = "/" + prefix
+            prefix = "/" + prefix.strip("/")
 
-            if request.path_info.startswith(prefix):
-                request.META["SCRIPT_NAME"] = prefix
-                request.META["PATH_INFO"] = request.path_info[len(prefix):] or "/"
-            else:
-                request.META.setdefault("SCRIPT_NAME", prefix)
+            # 1. WSGI environ — some Django internals read SCRIPT_NAME here
+            request.META["SCRIPT_NAME"] = prefix
+
+            # 2. Thread-local script prefix — used by reverse() and {% url %}
+            set_script_prefix(prefix)
+
+            # 3. request.path — used by get_full_path() which sets the
+            #    ?next= parameter on login redirects.  FORCE_SCRIPT_NAME
+            #    may have already prepended the prefix during WSGIRequest
+            #    init, so guard against doubling it.
+            if not request.path.startswith(prefix):
+                request.path = prefix + request.path
 
         return self.get_response(request)
