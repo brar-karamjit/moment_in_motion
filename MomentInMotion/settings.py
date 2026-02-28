@@ -16,8 +16,6 @@ from dotenv import load_dotenv
 
 load_dotenv()  # reads .env file
 
-WEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,12 +27,12 @@ LOGOUT_REDIRECT_URL = 'accounts:login'  # after logout
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y+%q89riv&e2^s-2r5-=v8@e5rfy+=ue$)!i@@g6=rbq+ns-r*'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-y+%q89riv&e2^s-2r5-=v8@e5rfy+=ue$)!i@@g6=rbq+ns-r*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',') if os.getenv('DJANGO_ALLOWED_HOSTS') else []
 
 
 # Application definition
