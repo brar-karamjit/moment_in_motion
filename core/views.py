@@ -5,7 +5,10 @@ import os
 import logging
 
 from .forms import UserProfileForm
-from core.models import UserMetadata     
+from core.models import UserMetadata    
+
+# helper for hello microservice
+HELLO_SERVICE_URL = os.getenv("HELLO_SERVICE_URL", "http://hello-service")
 
 
 
@@ -105,6 +108,19 @@ def home(request):
         "user": user,
         "suggestion_data": suggestion_data,
     })
+
+
+@login_required
+def call_hello(request):
+    """Invoke the lightweight hello microservice and render its response."""
+    try:
+        resp = requests.get(HELLO_SERVICE_URL, timeout=3)
+        hello_text = resp.text.strip()
+    except requests.RequestException as exc:
+        logger.warning("hello service unreachable", exc_info=exc)
+        hello_text = "(failed to contact hello service)"
+
+    return render(request, "core/hello.html", {"hello": hello_text})
 
 
 @login_required

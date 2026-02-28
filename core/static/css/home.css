@@ -198,6 +198,25 @@
     transition: border-style 0.25s var(--transition-default),
         border-color 0.25s var(--transition-default),
         background 0.25s var(--transition-default);
+}
+
+/* hello service UI */
+.hello-section {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#hello-result {
+    min-height: 2em;
+    padding: 8px 12px;
+    border: 1px solid rgba(91,108,255,0.5);
+    border-radius: var(--radius-small);
+    background: rgba(91,108,255,0.1);
+    font-family: monospace;
+    white-space: pre-wrap;
+}
     min-height: 140px;
     display: flex;
     align-items: stretch;

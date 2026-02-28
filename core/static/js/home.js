@@ -171,6 +171,32 @@ function handlePositionError(error) {
     }
 }
 
+// call hello-service when button clicked
+const helloBtn = document.getElementById("call-hello");
+const helloOutput = document.getElementById("hello-result");
+
+if (helloBtn) {
+    helloBtn.addEventListener("click", async (evt) => {
+        evt.preventDefault();
+        if (helloOutput) {
+            helloOutput.textContent = "Calling service…";
+        }
+
+        try {
+            const resp = await fetch("/hello/");
+            const text = await resp.text();
+            if (helloOutput) {
+                helloOutput.textContent = text;
+            }
+        } catch (err) {
+            console.error("Error fetching hello:", err);
+            if (helloOutput) {
+                helloOutput.textContent = "(failed to call service)";
+            }
+        }
+    });
+}
+
 if ("geolocation" in navigator && tempElement) {
     showLoading();
     navigator.geolocation.getCurrentPosition(handlePositionSuccess, handlePositionError, {
