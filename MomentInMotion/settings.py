@@ -124,7 +124,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+FORCE_SCRIPT_NAME = os.getenv('DJANGO_FORCE_SCRIPT_NAME') or None
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+STATIC_URL = (
+    f"{FORCE_SCRIPT_NAME.rstrip('/')}/static/"
+    if FORCE_SCRIPT_NAME
+    else 'static/'
+)
 STATICFILES_DIRS = [
     BASE_DIR / "core" / "static",  # Points to core/static/
 ]
