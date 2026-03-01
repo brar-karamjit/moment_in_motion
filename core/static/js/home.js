@@ -179,14 +179,32 @@ if (helloBtn) {
     helloBtn.addEventListener("click", async (evt) => {
         evt.preventDefault();
         if (helloOutput) {
-            helloOutput.textContent = "Calling service…";
+            helloOutput.innerHTML = '<span class="hello-loading">Calling service...</span>';
         }
 
         try {
             const resp = await fetch("/hello/");
-            const text = await resp.text();
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}`);
+            }
+
+            let message = "";
+            try {
+                const data = await resp.json();
+                message = data.hello || "No message returned.";
+            } catch (parseError) {
+                const fallbackText = await resp.text();
+                message = fallbackText || "No message returned.";
+            }
+
             if (helloOutput) {
-                helloOutput.textContent = text;
+                helloOutput.innerHTML = `
+                    <div class="hello-card fade-in">
+                        <strong>Service response</strong>
+                        <div>${message}</div>
+                        <div class="hello-meta">Source: hello-service (cluster local)</div>
+                    </div>
+                `;
             }
         } catch (err) {
             console.error("Error fetching hello:", err);

@@ -208,6 +208,29 @@
     gap: 12px;
 }
 
+.hello-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.hello-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.hello-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(240, 140, 0, 0.16);
+    color: #9c4c00;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .hello-button {
     background: #f08c00;
     border-color: #f08c00;
@@ -227,6 +250,44 @@
     background: rgba(91,108,255,0.1);
     font-family: monospace;
     white-space: pre-wrap;
+}
+
+.hello-output {
+    border: 1px solid rgba(240, 140, 0, 0.35);
+    background: rgba(240, 140, 0, 0.08);
+    font-family: inherit;
+}
+
+.hello-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #9c4c00;
+    font-weight: 600;
+}
+
+.hello-loading::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(240, 140, 0, 0.35);
+    border-top-color: #f08c00;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.hello-card {
+    display: grid;
+    gap: 6px;
+}
+
+.hello-card strong {
+    color: #9c4c00;
+}
+
+.hello-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
 }
     min-height: 140px;
     display: flex;
