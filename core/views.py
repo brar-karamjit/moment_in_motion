@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
-from django.urls import reverse, get_script_prefix
 import requests
 import os
 import logging
@@ -10,23 +9,6 @@ import logging
 from .forms import UserProfileForm
 from core.models import UserMetadata    
 
-
-def debug_prefix(request):
-    """Temporary debug endpoint — remove after verifying prefix setup."""
-    return JsonResponse({
-        "FORCE_SCRIPT_NAME": settings.FORCE_SCRIPT_NAME,
-        "get_script_prefix()": get_script_prefix(),
-        "request.path": request.path,
-        "request.path_info": request.path_info,
-        "request.get_full_path()": request.get_full_path(),
-        "META.SCRIPT_NAME": request.META.get("SCRIPT_NAME", ""),
-        "META.PATH_INFO": request.META.get("PATH_INFO", ""),
-        "META.HTTP_X_FORWARDED_PREFIX": request.META.get("HTTP_X_FORWARDED_PREFIX", "(not set)"),
-        "META.HTTP_HOST": request.META.get("HTTP_HOST", ""),
-        "reverse('home')": reverse("home"),
-        "reverse('accounts:login')": reverse("accounts:login"),
-        "DJANGO_FORCE_SCRIPT_NAME_env": os.getenv("DJANGO_FORCE_SCRIPT_NAME", "(not set)"),
-    })
 
 # helper for hello microservice
 HELLO_SERVICE_URL = os.getenv(
