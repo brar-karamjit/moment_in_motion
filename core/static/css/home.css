@@ -208,6 +208,17 @@
     gap: 12px;
 }
 
+.hello-button {
+    background: #f08c00;
+    border-color: #f08c00;
+    color: #1b1b1b;
+}
+
+.hello-button:hover {
+    background: #e67700;
+    border-color: #e67700;
+}
+
 #hello-result {
     min-height: 2em;
     padding: 8px 12px;

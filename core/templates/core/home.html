@@ -62,14 +62,6 @@
             </button>
         </form>
 
-        <!-- hello service button -->
-        <div class="hello-section">
-            <button id="call-hello" class="insights-button">
-                Call second app
-            </button>
-            <div id="hello-result" class="hello-output"></div>
-        </div>
-
         <div class="insights-reveal {% if not suggestion_data %}is-empty{% endif %}">
             {% if suggestion_data %}
                 <div class="suggestion-body fade-in">{{ suggestion_data.response|linebreaksbr }}</div>
@@ -79,6 +71,14 @@
                     
                 </div>
             {% endif %}
+        </div>
+
+        <!-- hello service button -->
+        <div class="hello-section">
+            <button id="call-hello" class="insights-button hello-button">
+                Call Hello Service
+            </button>
+            <div id="hello-result" class="hello-output"></div>
         </div>
     </article>
 </section>
