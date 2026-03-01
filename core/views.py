@@ -13,7 +13,7 @@ from core.models import UserMetadata
 # helper for hello microservice
 HELLO_SERVICE_URL = os.getenv(
     "HELLO_SERVICE_URL",
-    "http://hello-service.hello.svc.cluster.local",
+    "http://hello-service.hello",
 )
 
 
