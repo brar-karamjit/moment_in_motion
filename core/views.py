@@ -18,7 +18,6 @@ HELLO_SERVICE_URL = os.getenv(
 
 
 
-
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # stored in environment variable
 logger = logging.getLogger(__name__)
 def get_suggestion(user, metadata, weather, latitude, longitude):
