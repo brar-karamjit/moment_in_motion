@@ -126,7 +126,7 @@ def call_hello(request):
         logger.warning("hello service unreachable", exc_info=exc)
         hello_text = "(failed to contact hello service)"
 
-    return render(request, "core/hello.html", {"hello": hello_text})
+    return JsonResponse({"hello": hello_text})
 
 
 @login_required
