@@ -1,0 +1,64 @@
+name: Docker CI - Build and Push to GHCR
+
+on:
+  push:
+    branches:
+      - main
+  # Optional: Allows manual runs from the GitHub UI
+  workflow_dispatch:
+
+env:
+  # The name of your application image in GHCR
+  IMAGE_NAME: momentinmotion
+  # Your GitHub Username or Organization Name
+  REGISTRY: ghcr.io
+  # Replace with your actual username/org
+  GHCR_PATH: ${{ github.repository_owner }}/momentinmotion 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      # Required for checking out code
+      contents: read
+      # Required to push images to GHCR
+      packages: write
+      
+    steps:
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Set up Docker Buildx
+        # Enables better building features like multi-arch and caching
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          # The GITHUB_TOKEN is automatically generated and has 'packages:write' permission
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️ Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.GHCR_PATH }}
+          tags: |
+            # Tag with the short commit SHA
+            ${{ github.sha }}
+            # Tag the main branch builds with 'latest'
+            latest
+
+      - name: 🏗️ Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # ADD THIS LINE:
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

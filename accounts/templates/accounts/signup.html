@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create account · MomentInMotion{% endblock %}
+
+{% block content %}
+<section class="card form-card">
+    <h2>Let’s create your account</h2>
+    <p>Tell us a little about you so we can tailor ideas that match your vibe, interests, and goals.</p>
+
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-field">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.first_name.id_for_label }}">First name</label>
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.last_name.id_for_label }}">Last name</label>
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.password1.id_for_label }}">Password</label>
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.password2.id_for_label }}">Confirm password</label>
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.interests.id_for_label }}">Interests</label>
+            <span class="help-text">Share a few activities, hobbies, or curiosities that excite you.</span>
+            {{ form.interests }}
+            {{ form.interests.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.drives.id_for_label }}">Drives</label>
+            <span class="help-text">Let us know how you get around to tailor nearby adventures.</span>
+            {{ form.drives }}
+            {{ form.drives.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.bio.id_for_label }}">Bio</label>
+            <span class="help-text">Drop a short intro so suggestions feel more personal.</span>
+            {{ form.bio }}
+            {{ form.bio.errors }}
+        </div>
+
+        <button type="submit">Create account</button>
+    </form>
+
+    <p class="muted-link">Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moment in Motion</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 Moment in Motion</h1>
+        <p class="subtitle">Capture your moment with weather & location</p>
+        
+        <div id="temperature">
+            <span class="loading">Detecting location...</span>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" id="lat" name="latitude">
+            <input type="hidden" id="lon" name="longitude">
+            <input type="hidden" id="temperature_input" name="temperature">
+            <input type="hidden" id="weather_text_input" name="weather_text">
+            <button type="submit">Save Moment ✨</button>
+        </form>
+    </div>
+    
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>

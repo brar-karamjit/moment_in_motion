@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MomentInMotion{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="background-glow" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <div class="header-container">
+            <a href="{% url 'home' %}" class="brand" aria-label="MomentInMotion home">
+                <img src="{% static 'images/logo.png' %}" alt="MomentInMotion logo" class="brand-logo">
+                <span class="brand-text"><span class="brand-accent">Moment</span>InMotion</span>
+            </a>
+
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+                <span class="nav-toggle-bar"></span>
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+
+            <nav class="nav-links" id="primary-navigation">
+                <ul>
+                    <li><a href="{% url 'home' %}" class="nav-link">Dashboard</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+                        <li><a href="{% url 'accounts:logout' %}" class="nav-link nav-link--contrast">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'accounts:login' %}" class="nav-link">Login</a></li>
+                        <li><a href="{% url 'accounts:signup' %}" class="nav-link nav-link--contrast">Create account</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p>&copy; {% now "Y" %} MomentInMotion. Crafted to capture every moment.</p>
+            <div class="footer-links">
+                <a href="mailto:support@momentinmotion.app">Support</a>
+                <span aria-hidden="true">•</span>
+                <a href="https://open-meteo.com/" rel="noopener" target="_blank">Weather data via Open‑Meteo</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

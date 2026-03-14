@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ user.first_name }}'s Profile{% endblock %}
+{% block content %}
+<section class="card form-card">
+    <h2>Profile · {{ user.first_name|default:user.username }}</h2>
+    <p class="card-subtitle">Fine-tune your interests so we can send better ideas when the weather aligns.</p>
+
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label>First name</label>
+            <input type="text" value="{{ user.first_name }}" readonly>
+        </div>
+
+        <div class="form-field">
+            <label>Last name</label>
+            <input type="text" value="{{ user.last_name }}" readonly>
+        </div>
+
+        <div class="form-field">
+            <label>Username</label>
+            <input type="text" value="{{ user.username }}" readonly>
+        </div>
+
+        <div class="form-field">
+            <label for="id_bio">Bio</label>
+            <span class="help-text">Tell us something interesting about yourself.</span>
+            {{ form.bio }}
+            {{ form.bio.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="id_interests">Interests</label>
+            <span class="help-text">What activities light you up lately?</span>
+            {{ form.interests }}
+            {{ form.interests.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="id_drives">Drives</label>
+            <span class="help-text">Let us know if you have access to a vehicle.</span>
+            {{ form.drives }}
+            {{ form.drives.errors }}
+        </div>
+
+        <button type="submit">Save updates</button>
+    </form>
+</section>
+{% endblock %}
