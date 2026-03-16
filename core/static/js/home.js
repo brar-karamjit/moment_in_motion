@@ -147,19 +147,24 @@ async function handlePositionSuccess(position) {
 
     await updateLocationPill(lat, lon);
 
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`)
-        .then((resp) => resp.json())
-        .then((data) => {
-            if (data && data.current_weather) {
-                renderWeather(data.current_weather);
-            } else {
-                showError("Weather data missing");
-            }
-        })
-        .catch((err) => {
-            console.error("Weather fetch error:", err);
-            showError("Unable to fetch weather data");
-        });
+    try {
+        const resp = await fetch(`/weather/?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`);
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            const apiError = data && data.error ? data.error : `HTTP ${resp.status}`;
+            throw new Error(apiError);
+        }
+
+        if (data && data.current_weather) {
+            renderWeather(data.current_weather);
+        } else {
+            showError("Weather data missing");
+        }
+    } catch (err) {
+        console.error("Weather fetch error:", err);
+        showError("Unable to fetch weather data");
+    }
 }
 
 function handlePositionError(error) {

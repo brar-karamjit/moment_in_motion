@@ -15,6 +15,7 @@ HELLO_SERVICE_URL = os.getenv(
     "HELLO_SERVICE_URL",
     "http://hello-service.hello",
 )
+HELLO_WEATHER_URL = f"{HELLO_SERVICE_URL.rstrip('/')}/weather"
 
 
 
@@ -126,6 +127,52 @@ def call_hello(request):
         hello_text = "(failed to contact hello service)"
 
     return JsonResponse({"hello": hello_text})
+
+
+@login_required
+def call_weather(request):
+    """Proxy weather lookup through hello-service."""
+    lat = request.GET.get("lat")
+    lon = request.GET.get("lon")
+
+    if lat is None or lon is None:
+        return JsonResponse({"error": "Missing required query params: lat, lon"}, status=400)
+
+    try:
+        latitude = float(lat)
+        longitude = float(lon)
+    except ValueError:
+        return JsonResponse({"error": "Invalid lat/lon. Values must be numeric."}, status=400)
+
+    if not (-90 <= latitude <= 90) or not (-180 <= longitude <= 180):
+        return JsonResponse({"error": "lat/lon out of valid range"}, status=400)
+
+    try:
+        resp = requests.get(
+            HELLO_WEATHER_URL,
+            params={"lat": latitude, "lon": longitude},
+            timeout=5,
+        )
+    except requests.RequestException as exc:
+        logger.warning("hello weather service unreachable", exc_info=exc)
+        return JsonResponse({"error": "Unable to reach weather service"}, status=503)
+
+    try:
+        payload = resp.json()
+    except ValueError:
+        payload = {}
+
+    if resp.status_code >= 400:
+        api_error = payload.get("error") if isinstance(payload, dict) else None
+        return JsonResponse(
+            {"error": api_error or "Weather lookup failed"},
+            status=resp.status_code,
+        )
+
+    if not isinstance(payload, dict) or "current_weather" not in payload:
+        return JsonResponse({"error": "Invalid weather response from hello service"}, status=502)
+
+    return JsonResponse(payload)
 
 
 @login_required
