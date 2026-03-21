@@ -11,10 +11,12 @@ from core.models import UserMetadata
 
 
 # helper for hello microservice
-HELLO_SERVICE_URL = os.getenv(
-    "HELLO_SERVICE_URL",
-    "http://hello-service.hello",
-)
+HELLO_SERVICE_URL = os.getenv("HELLO_SERVICE_URL")
+if not HELLO_SERVICE_URL:
+    if os.getenv("KUBERNETES_SERVICE_HOST"):
+        HELLO_SERVICE_URL = "http://hello-service.hello"
+    else:
+        HELLO_SERVICE_URL = "http://127.0.0.1:80"
 HELLO_WEATHER_URL = f"{HELLO_SERVICE_URL.rstrip('/')}/weather"
 
 

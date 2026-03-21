@@ -163,7 +163,7 @@ async function handlePositionSuccess(position) {
         }
     } catch (err) {
         console.error("Weather fetch error:", err);
-        showError("Unable to fetch weather data");
+        showError(err && err.message ? err.message : "Unable to fetch weather data");
     }
 }
 
