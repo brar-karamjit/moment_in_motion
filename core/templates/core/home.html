@@ -9,28 +9,42 @@
 {% block content %}
 <section class="home-hero">
     <div class="hero-tags">
-        <span class="hero-tag">✨ Personalized</span>
-        <span class="hero-tag">📍 Weather aware</span>
-        <span class="hero-tag">⚡ Real-time</span>
+        <span class="hero-tag hero-tag--ok">Pipeline stable</span>
+        <span class="hero-tag hero-tag--info">Geo weather feed</span>
+        <span class="hero-tag hero-tag--warn">Live inference</span>
     </div>
     {% with user.first_name|default:"Explorer" as first_name %}
-    <h1>Hello, {{ first_name }}.</h1>
+    <h1>Operational briefing, {{ first_name }}.</h1>
     {% endwith %}
-    <p>ßite-sized inspiration you can act on right away.</p>
+    <p>Demo control plane for weather telemetry, profile-aware recommendations, and service mesh checks.</p>
+    <div class="status-strip" aria-label="Platform summary">
+        <div class="status-item">
+            <span class="status-label">Env</span>
+            <span class="status-value">dev</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">Services</span>
+            <span class="status-value">2 active</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">Region</span>
+            <span class="status-value">auto-detect</span>
+        </div>
+    </div>
 </section>
 
 <section class="home-grid">
     <article class="card weather-card">
         <div class="weather-header">
-            <span class="weather-title">Right now outdoors</span>
-            <span class="location-pill"><span aria-hidden="true">📍</span><span id="location-label">Locating…</span></span>
+            <span class="weather-title">Environment Snapshot</span>
+            <span class="location-pill"><span class="location-key">NODE</span><span id="location-label">Detecting location</span></span>
         </div>
         <div id="temperature">
-            <span class="loading">Pulling live conditions</span>
+            <span class="loading">Collecting telemetry</span>
         </div>
         <div class="weather-stats">
             <div class="weather-stat">
-                <span>Wind</span>
+                <span>Wind speed</span>
                 <span id="wind-speed">-- km/h</span>
             </div>
             <div class="weather-stat">
@@ -38,7 +52,7 @@
                 <span id="wind-direction">--</span>
             </div>
             <div class="weather-stat">
-                <span>Updated</span>
+                <span>Sampled at</span>
                 <span id="last-updated">--</span>
             </div>
         </div>
@@ -46,8 +60,8 @@
 
     <article class="card insights-card">
         <div class="insights-copy">
-            <h2>Spark something now</h2>
-            <p>Press the button to see your next move.</p>
+            <h2>Recommendation Engine</h2>
+            <p>Generate context-aware suggestions from weather telemetry and user profile metadata.</p>
         </div>
 
         <form method="post" class="insights-form">
@@ -58,7 +72,7 @@
             <input type="hidden" name="weathercode" id="weather_text_input">
 
             <button type="submit" name="action" value="get_suggestion" class="insights-button">
-                Suggest activity
+                Run recommendation
             </button>
         </form>
 
@@ -67,8 +81,7 @@
                 <div class="suggestion-body fade-in">{{ suggestion_data.response|linebreaksbr }}</div>
             {% else %}
                 <div class="reveal-placeholder">
-                    <strong>. . .</strong>
-                    
+                    <strong>No output generated</strong>
                 </div>
             {% endif %}
         </div>
@@ -76,11 +89,11 @@
         <!-- hello service button -->
         <div class="hello-section">
             <div class="hello-header">
-                <span class="hello-title">Cross-app check</span>
-                <span class="hello-pill">Istio demo</span>
+                <span class="hello-title">Service Mesh Probe</span>
+                <span class="hello-pill">ISTIO</span>
             </div>
             <button id="call-hello" class="insights-button hello-button">
-                Call Hello Service
+                Run /hello probe
             </button>
             <div id="hello-result" class="hello-output"></div>
         </div>
