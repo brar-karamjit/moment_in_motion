@@ -1,31 +1,31 @@
-const weatherCodes = {
-    0: "Clear",
-    1: "Mostly clear",
-    2: "Partly cloudy",
-    3: "Cloudy",
-    45: "Fog",
-    48: "Rime fog",
-    51: "Light drizzle",
-    53: "Moderate drizzle",
-    55: "Dense drizzle",
-    56: "Freezing drizzle",
-    57: "Dense freezing drizzle",
-    61: "Light rain",
-    63: "Moderate rain",
-    65: "Heavy rain",
-    66: "Freezing rain",
-    67: "Heavy freezing rain",
-    71: "Light snow",
-    73: "Moderate snow",
-    75: "Heavy snow",
-    80: "Rain showers",
-    81: "Moderate rain showers",
-    82: "Heavy rain showers",
-    85: "Snow showers",
-    86: "Heavy snow showers",
-    95: "Thunderstorm",
-    96: "Thunderstorm with hail",
-    99: "Severe thunderstorm"
+const weatherEmoji = {
+    0: "☀️ Clear",
+    1: "🌤️ Mainly clear",
+    2: "⛅ Partly cloudy",
+    3: "☁️ Cloudy",
+    45: "🌫️ Fog",
+    48: "🌫️ Depositing rime fog",
+    51: "🌦️ Light drizzle",
+    53: "🌦️ Moderate drizzle",
+    55: "🌦️ Dense drizzle",
+    56: "🌧️ Freezing drizzle",
+    57: "🌧️ Dense freezing drizzle",
+    61: "🌧️ Slight rain",
+    63: "🌧️ Moderate rain",
+    65: "🌧️ Heavy rain",
+    66: "🌧️ Freezing rain",
+    67: "🌧️ Heavy freezing rain",
+    71: "❄️ Slight snow",
+    73: "❄️ Moderate snow",
+    75: "❄️ Heavy snow",
+    80: "🌦️ Rain showers",
+    81: "🌦️ Moderate rain showers",
+    82: "🌧️ Violent rain showers",
+    85: "❄️ Snow showers",
+    86: "❄️ Heavy snow showers",
+    95: "⛈️ Thunderstorm",
+    96: "⛈️ Thunderstorm with hail",
+    99: "⛈️ Severe thunderstorm"
 };
 
 const tempElement = document.getElementById("temperature");
@@ -36,14 +36,14 @@ const lastUpdatedEl = document.getElementById("last-updated");
 
 function showLoading() {
     if (tempElement) {
-        tempElement.innerHTML = '<span class="loading">Pulling live telemetry</span>';
+        tempElement.innerHTML = '<span class="loading">Fetching weather</span>';
         tempElement.classList.remove("fade-in");
     }
 }
 
 function showError(message) {
     if (tempElement) {
-        tempElement.innerHTML = `<span class="error">Telemetry error: ${message}</span>`;
+        tempElement.innerHTML = `<span class="error">⚠️ ${message}</span>`;
         tempElement.classList.remove("fade-in");
     }
     if (locationLabel) {
@@ -91,7 +91,7 @@ async function updateLocationPill(lat, lon) {
         if (data && data.address) {
             const city = data.address.city || data.address.town || data.address.village || data.address.hamlet;
             if (city) {
-                locationLabel.textContent = city;
+                locationLabel.textContent = `Near ${city}`;
                 return;
             }
         }
@@ -100,7 +100,7 @@ async function updateLocationPill(lat, lon) {
     }
     // Fallback to coordinates
     const formatted = `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`;
-    locationLabel.textContent = formatted;
+    locationLabel.textContent = `Near ${formatted}`;
 }
 
 function renderWeather(current) {
@@ -109,7 +109,7 @@ function renderWeather(current) {
     const code = current.weathercode;
     const windspeed = Math.round(current.windspeed);
     const winddirection = current.winddirection;
-    const description = weatherCodes[code] || `Code ${code}`;
+    const description = weatherEmoji[code] || `Weather code ${code}`;
 
     tempElement.innerHTML = `
         <div class="weather-info fade-in">
@@ -170,9 +170,9 @@ async function handlePositionSuccess(position) {
 function handlePositionError(error) {
     console.error("Geolocation error:", error);
     if (error.code === error.PERMISSION_DENIED) {
-        showError("Location access denied. Enable geolocation to run weather inference.");
+        showError("Location access denied. Enable location to personalize suggestions.");
     } else {
-        showError("Unable to determine location");
+        showError("Unable to determine location.");
     }
 }
 
@@ -184,7 +184,7 @@ if (helloBtn) {
     helloBtn.addEventListener("click", async (evt) => {
         evt.preventDefault();
         if (helloOutput) {
-            helloOutput.innerHTML = '<span class="hello-loading">Probing service endpoint</span>';
+            helloOutput.innerHTML = '<span class="hello-loading">Calling service...</span>';
         }
 
         try {
@@ -205,16 +205,16 @@ if (helloBtn) {
             if (helloOutput) {
                 helloOutput.innerHTML = `
                     <div class="hello-card fade-in">
-                        <strong>Probe response</strong>
+                        <strong>Service response</strong>
                         <div>${message}</div>
-                        <div class="hello-meta">source: weather-service | path: /hello/</div>
+                        <div class="hello-meta">Source: weather-service (cluster local)</div>
                     </div>
                 `;
             }
         } catch (err) {
             console.error("Error fetching service:", err);
             if (helloOutput) {
-                helloOutput.textContent = "probe failed";
+                helloOutput.textContent = "(failed to call service)";
             }
         }
     });
@@ -228,5 +228,5 @@ if ("geolocation" in navigator && tempElement) {
         maximumAge: 60_000
     });
 } else if (tempElement) {
-    showError("Geolocation is not supported by this browser");
+    showError("Geolocation is not supported by your browser");
 }
