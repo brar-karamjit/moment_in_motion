@@ -7,22 +7,49 @@ import os
 import logging
 
 from .forms import UserProfileForm
-from core.models import UserMetadata    
+from core.models import UserMetadata
 
 
-# helper for hello microservice
-HELLO_SERVICE_URL = os.getenv("HELLO_SERVICE_URL")
-if not HELLO_SERVICE_URL:
-    if os.getenv("KUBERNETES_SERVICE_HOST"):
-        HELLO_SERVICE_URL = "http://hello-service.hello"
-    else:
-        HELLO_SERVICE_URL = "http://127.0.0.1:80"
-HELLO_WEATHER_URL = f"{HELLO_SERVICE_URL.rstrip('/')}/weather"
+# helper for weather microservice
+WEATHER_SERVICE_URL = (
+    os.getenv("WEATHER_SERVICE_URL")
+    or os.getenv("HELLO_SERVICE_URL")
+    or "http://weather-service.weather"
+)
+WEATHER_API_URL = f"{WEATHER_SERVICE_URL.rstrip('/')}/weather"
 
 
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # stored in environment variable
 logger = logging.getLogger(__name__)
+
+
+def fetch_weather_from_service(latitude, longitude, timeout=5):
+    try:
+        resp = requests.get(
+            WEATHER_API_URL,
+            params={"lat": latitude, "lon": longitude},
+            timeout=timeout,
+        )
+    except requests.RequestException as exc:
+        logger.warning("weather service unreachable", exc_info=exc)
+        return None, "Unable to reach weather service", 503
+
+    try:
+        payload = resp.json()
+    except ValueError:
+        payload = {}
+
+    if resp.status_code >= 400:
+        api_error = payload.get("error") if isinstance(payload, dict) else None
+        return None, api_error or "Weather lookup failed", resp.status_code
+
+    if not isinstance(payload, dict) or "current_weather" not in payload:
+        return None, "Invalid weather response from weather service", 502
+
+    return payload, None, 200
+
+
 def get_suggestion(user, metadata, weather, latitude, longitude):
     user_name = f"{user.first_name} {user.last_name}".strip() or user.username or "Explorer"
     interests = getattr(metadata, "interests", None) or "no specific interest"
@@ -103,12 +130,38 @@ def home(request):
     if request.method == "POST" and request.POST.get("action") == "get_suggestion":
         lat = request.POST.get("lat")
         lon = request.POST.get("lon")
-        temperature = request.POST.get("temperature")
-        weathercode = request.POST.get("weathercode")
 
-        weather = {"temperature": temperature, "weathercode": weathercode}
+        if lat is None or lon is None:
+            suggestion_data = {"response": "Missing location data. Please allow location access and try again."}
+            request.session["last_suggestion"] = suggestion_data
+            return redirect("home")
 
-        suggestion_data = get_suggestion(user, metadata, weather, lat, lon)
+        try:
+            latitude = float(lat)
+            longitude = float(lon)
+        except ValueError:
+            suggestion_data = {"response": "Invalid location values received. Please try again."}
+            request.session["last_suggestion"] = suggestion_data
+            return redirect("home")
+
+        if not (-90 <= latitude <= 90) or not (-180 <= longitude <= 180):
+            suggestion_data = {"response": "Location values are out of range. Please refresh and try again."}
+            request.session["last_suggestion"] = suggestion_data
+            return redirect("home")
+
+        weather_payload, weather_error, _ = fetch_weather_from_service(latitude, longitude)
+        if weather_error:
+            suggestion_data = {"response": f"Could not retrieve weather via weather-service: {weather_error}"}
+            request.session["last_suggestion"] = suggestion_data
+            return redirect("home")
+
+        current_weather = weather_payload.get("current_weather", {})
+        weather = {
+            "temperature": current_weather.get("temperature", "unknown"),
+            "weathercode": current_weather.get("weathercode", "unknown"),
+        }
+
+        suggestion_data = get_suggestion(user, metadata, weather, latitude, longitude)
         request.session["last_suggestion"] = suggestion_data
         return redirect("home")
 
@@ -120,20 +173,20 @@ def home(request):
 
 @login_required
 def call_hello(request):
-    """Invoke the lightweight hello microservice and render its response."""
+    """Invoke the lightweight weather microservice and render its response."""
     try:
-        resp = requests.get(HELLO_SERVICE_URL, timeout=3)
+        resp = requests.get(WEATHER_SERVICE_URL, timeout=3)
         hello_text = resp.text.strip()
     except requests.RequestException as exc:
-        logger.warning("hello service unreachable", exc_info=exc)
-        hello_text = "(failed to contact hello service)"
+        logger.warning("weather service unreachable", exc_info=exc)
+        hello_text = "(failed to contact weather service)"
 
     return JsonResponse({"hello": hello_text})
 
 
 @login_required
 def call_weather(request):
-    """Proxy weather lookup through hello-service."""
+    """Proxy weather lookup through weather-service."""
     lat = request.GET.get("lat")
     lon = request.GET.get("lon")
 
@@ -149,30 +202,9 @@ def call_weather(request):
     if not (-90 <= latitude <= 90) or not (-180 <= longitude <= 180):
         return JsonResponse({"error": "lat/lon out of valid range"}, status=400)
 
-    try:
-        resp = requests.get(
-            HELLO_WEATHER_URL,
-            params={"lat": latitude, "lon": longitude},
-            timeout=5,
-        )
-    except requests.RequestException as exc:
-        logger.warning("hello weather service unreachable", exc_info=exc)
-        return JsonResponse({"error": "Unable to reach weather service"}, status=503)
-
-    try:
-        payload = resp.json()
-    except ValueError:
-        payload = {}
-
-    if resp.status_code >= 400:
-        api_error = payload.get("error") if isinstance(payload, dict) else None
-        return JsonResponse(
-            {"error": api_error or "Weather lookup failed"},
-            status=resp.status_code,
-        )
-
-    if not isinstance(payload, dict) or "current_weather" not in payload:
-        return JsonResponse({"error": "Invalid weather response from hello service"}, status=502)
+    payload, error_message, status_code = fetch_weather_from_service(latitude, longitude)
+    if error_message:
+        return JsonResponse({"error": error_message}, status=status_code)
 
     return JsonResponse(payload)
 

@@ -176,7 +176,7 @@ function handlePositionError(error) {
     }
 }
 
-// call hello-service when button clicked
+// call weather-service when button clicked
 const helloBtn = document.getElementById("call-hello");
 const helloOutput = document.getElementById("hello-result");
 
@@ -207,12 +207,12 @@ if (helloBtn) {
                     <div class="hello-card fade-in">
                         <strong>Service response</strong>
                         <div>${message}</div>
-                        <div class="hello-meta">Source: hello-service (cluster local)</div>
+                        <div class="hello-meta">Source: weather-service (cluster local)</div>
                     </div>
                 `;
             }
         } catch (err) {
-            console.error("Error fetching hello:", err);
+            console.error("Error fetching service:", err);
             if (helloOutput) {
                 helloOutput.textContent = "(failed to call service)";
             }
