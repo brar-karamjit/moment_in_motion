@@ -286,6 +286,10 @@ body {
     margin: 0 auto;
 }
 
+.profile-dashboard.form-card {
+    width: min(980px, 100%);
+}
+
 .form-card h2 {
     font-size: 1.6rem;
     margin-bottom: 12px;
@@ -300,6 +304,76 @@ body {
     display: flex;
     flex-direction: column;
     gap: 18px;
+}
+
+.profile-dashboard__header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 26px;
+}
+
+.profile-dashboard__header h2 {
+    margin: 0;
+}
+
+.profile-dashboard__header .card-subtitle {
+    margin: 0;
+    max-width: 72ch;
+}
+
+.profile-dashboard__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-dashboard__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.profile-panel {
+    border-radius: var(--radius-medium);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-panel h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    letter-spacing: -0.01em;
+}
+
+.profile-panel .card-subtitle {
+    margin: 0;
+}
+
+.profile-readonly-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+.profile-dashboard__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    padding-top: 18px;
+}
+
+.profile-dashboard__actions .help-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
 .form-field {
@@ -491,7 +565,31 @@ button:disabled {
         padding: 26px;
     }
 
+    .profile-panel {
+        padding: 18px;
+    }
+
     .site-footer {
         padding: 32px 20px 40px;
+    }
+}
+
+@media (min-width: 760px) {
+    .profile-readonly-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .profile-readonly-grid__wide {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (min-width: 920px) {
+    .profile-dashboard__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .profile-panel--full {
+        grid-column: 1 / -1;
     }
 }

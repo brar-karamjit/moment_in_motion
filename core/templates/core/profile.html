@@ -3,50 +3,77 @@
 
 {% block title %}{{ user.first_name }}'s Profile{% endblock %}
 {% block content %}
-<section class="card form-card">
-    <h2>Profile · {{ user.first_name|default:user.username }}</h2>
-    <p class="card-subtitle">Fine-tune your interests so we can send better ideas when the weather aligns.</p>
+<section class="card form-card profile-dashboard">
+    <header class="profile-dashboard__header">
+        <span class="hero-eyebrow">Recommendation profile</span>
+        <h2>Profile Configuration · {{ user.first_name|default:user.username }}</h2>
+        <p class="card-subtitle">Tune your recommendation inputs so activity suggestions better match your context and mobility.</p>
+    </header>
 
-    <form method="post" class="form-grid">
+    <form method="post" class="profile-dashboard__form">
         {% csrf_token %}
 
-        <div class="form-field">
-            <label>First name</label>
-            <input type="text" value="{{ user.first_name }}" readonly>
+        <div class="profile-dashboard__grid">
+            <section class="profile-panel">
+                <h3>Identity Snapshot</h3>
+                <p class="card-subtitle">Account identifiers used in your personalization context.</p>
+
+                <div class="profile-readonly-grid">
+                    <div class="form-field">
+                        <label>First name</label>
+                        <input type="text" value="{{ user.first_name }}" readonly>
+                    </div>
+
+                    <div class="form-field">
+                        <label>Last name</label>
+                        <input type="text" value="{{ user.last_name }}" readonly>
+                    </div>
+
+                    <div class="form-field profile-readonly-grid__wide">
+                        <label>Username</label>
+                        <input type="text" value="{{ user.username }}" readonly>
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <h3>Recommendation Inputs</h3>
+                <p class="card-subtitle">These values feed directly into activity generation.</p>
+
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="id_interests">Interests</label>
+                        <span class="help-text">List your current interests so suggestions align with your intent.</span>
+                        {{ form.interests }}
+                        {{ form.interests.errors }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="id_drives">Transport access</label>
+                        <span class="help-text">Indicate whether travel by car is available for longer-range suggestions.</span>
+                        {{ form.drives }}
+                        {{ form.drives.errors }}
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-panel profile-panel--full">
+                <h3>Context Notes</h3>
+                <p class="card-subtitle">Optional context used to shape tone and activity framing.</p>
+
+                <div class="form-field">
+                    <label for="id_bio">Bio</label>
+                    <span class="help-text">Share concise context such as pace preference, routines, or constraints.</span>
+                    {{ form.bio }}
+                    {{ form.bio.errors }}
+                </div>
+            </section>
         </div>
 
-        <div class="form-field">
-            <label>Last name</label>
-            <input type="text" value="{{ user.last_name }}" readonly>
+        <div class="profile-dashboard__actions">
+            <p class="help-text">Changes are applied immediately to future recommendation requests.</p>
+            <button type="submit">Save profile settings</button>
         </div>
-
-        <div class="form-field">
-            <label>Username</label>
-            <input type="text" value="{{ user.username }}" readonly>
-        </div>
-
-        <div class="form-field">
-            <label for="id_bio">Bio</label>
-            <span class="help-text">Tell us something interesting about yourself.</span>
-            {{ form.bio }}
-            {{ form.bio.errors }}
-        </div>
-
-        <div class="form-field">
-            <label for="id_interests">Interests</label>
-            <span class="help-text">What activities light you up lately?</span>
-            {{ form.interests }}
-            {{ form.interests.errors }}
-        </div>
-
-        <div class="form-field">
-            <label for="id_drives">Drives</label>
-            <span class="help-text">Let us know if you have access to a vehicle.</span>
-            {{ form.drives }}
-            {{ form.drives.errors }}
-        </div>
-
-        <button type="submit">Save updates</button>
     </form>
 </section>
 {% endblock %}
