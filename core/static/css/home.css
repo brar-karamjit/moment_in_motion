@@ -214,7 +214,7 @@
 .architecture-card {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
 .architecture-copy {
@@ -232,16 +232,53 @@
     color: var(--text-secondary);
 }
 
-.architecture-flow {
-    margin: 0;
-    padding-left: 18px;
+.architecture-grid {
     display: grid;
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.architecture-node {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border-radius: var(--radius-small);
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+}
+
+.architecture-step {
+    width: fit-content;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--accent-strong);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+.architecture-node h3 {
+    margin: 0;
+    font-size: 1rem;
     color: var(--text-primary);
 }
 
-.architecture-flow li {
+.architecture-node p {
+    margin: 0;
+    color: var(--text-secondary);
     line-height: 1.5;
+}
+
+.architecture-meta {
+    width: fit-content;
+    margin-top: 2px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 0.78rem;
+    font-weight: 600;
 }
 
 .hello-header {
@@ -415,6 +452,10 @@
     .home-grid {
         grid-template-columns: 1fr;
     }
+
+    .architecture-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 640px) {
@@ -432,7 +473,7 @@
         min-height: 130px;
     }
 
-    .architecture-flow {
-        padding-left: 16px;
+    .architecture-node {
+        padding: 14px;
     }
 }

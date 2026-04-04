@@ -78,11 +78,11 @@
 <section class="card service-check-card">
     <div class="hello-section">
         <div class="hello-header">
-            <span class="hello-title">Service Health Check</span>
-            <span class="hello-pill">Istio demo</span>
+            <span class="hello-title">Weather Service Health Check</span>
+            <span class="hello-pill">weather-service</span>
         </div>
         <button id="call-hello" class="insights-button hello-button">
-            Call Hello Service
+            Run Weather Service Probe
         </button>
         <div id="hello-result" class="hello-output"></div>
     </div>
@@ -91,14 +91,37 @@
 <section class="card architecture-card">
     <div class="architecture-copy">
         <h2>Architecture Summary</h2>
-        <p>Current request flow used in this demo deployment.</p>
+        <p>Runtime flow for weather retrieval, recommendation generation, and service probe checks.</p>
     </div>
-    <ul class="architecture-flow">
-        <li>Browser geolocation acquires latitude and longitude.</li>
-        <li>Weather endpoint fetches live conditions from weather-service.</li>
-        <li>Recommendation action posts weather context and user metadata.</li>
-        <li>Cross-app probe verifies mesh routing through /hello endpoint.</li>
-    </ul>
+    <div class="architecture-grid">
+        <article class="architecture-node">
+            <span class="architecture-step">01</span>
+            <h3>Client Geolocation</h3>
+            <p>Browser captures latitude and longitude from the geolocation API.</p>
+            <span class="architecture-meta">Input source</span>
+        </article>
+
+        <article class="architecture-node">
+            <span class="architecture-step">02</span>
+            <h3>Weather Data Fetch</h3>
+            <p>Frontend calls /weather and receives current conditions from weather-service.</p>
+            <span class="architecture-meta">Endpoint: /weather</span>
+        </article>
+
+        <article class="architecture-node">
+            <span class="architecture-step">03</span>
+            <h3>Recommendation Engine</h3>
+            <p>Suggestion request combines weather context and user profile metadata.</p>
+            <span class="architecture-meta">Action: get_suggestion</span>
+        </article>
+
+        <article class="architecture-node">
+            <span class="architecture-step">04</span>
+            <h3>Service Probe</h3>
+            <p>Health check hits Django /hello proxy, which probes weather-service root / endpoint.</p>
+            <span class="architecture-meta">Probe path: /hello -> /</span>
+        </article>
+    </div>
 </section>
 {% endblock %}
 

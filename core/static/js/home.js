@@ -176,7 +176,7 @@ function handlePositionError(error) {
     }
 }
 
-// call weather-service when button clicked
+// call weather-service health endpoint when button clicked
 const helloBtn = document.getElementById("call-hello");
 const helloOutput = document.getElementById("hello-result");
 
@@ -184,7 +184,7 @@ if (helloBtn) {
     helloBtn.addEventListener("click", async (evt) => {
         evt.preventDefault();
         if (helloOutput) {
-            helloOutput.innerHTML = '<span class="hello-loading">Calling service...</span>';
+            helloOutput.innerHTML = '<span class="hello-loading">Running weather-service probe...</span>';
         }
 
         try {
@@ -205,16 +205,16 @@ if (helloBtn) {
             if (helloOutput) {
                 helloOutput.innerHTML = `
                     <div class="hello-card fade-in">
-                        <strong>Service response</strong>
+                        <strong>Weather-service response</strong>
                         <div>${message}</div>
-                        <div class="hello-meta">Source: weather-service (cluster local)</div>
+                        <div class="hello-meta">Source: Django /hello proxy -> weather-service /</div>
                     </div>
                 `;
             }
         } catch (err) {
             console.error("Error fetching service:", err);
             if (helloOutput) {
-                helloOutput.textContent = "(failed to call service)";
+                helloOutput.textContent = "(weather-service probe failed)";
             }
         }
     });
