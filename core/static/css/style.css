@@ -1,21 +1,21 @@
 :root {
     color-scheme: light;
     --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --gradient-background: radial-gradient(circle at 20% 20%, rgba(123, 97, 255, 0.28), transparent 55%),
-        radial-gradient(circle at 80% 0%, rgba(60, 183, 255, 0.25), transparent 40%),
-        #f6f7fb;
-    --surface-primary: rgba(255, 255, 255, 0.82);
-    --surface-elevated: rgba(255, 255, 255, 0.92);
-    --border-subtle: rgba(15, 23, 42, 0.08);
-    --shadow-soft: 0 25px 60px rgba(15, 23, 42, 0.15);
-    --shadow-card: 0 18px 45px rgba(32, 56, 117, 0.18);
+    --gradient-background: radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.12), transparent 50%),
+        radial-gradient(circle at 82% 0%, rgba(14, 165, 233, 0.14), transparent 38%),
+        #eef3f8;
+    --surface-primary: rgba(255, 255, 255, 0.94);
+    --surface-elevated: #ffffff;
+    --border-subtle: rgba(15, 23, 42, 0.12);
+    --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.10);
+    --shadow-card: 0 14px 34px rgba(30, 41, 59, 0.10);
     --text-primary: #0b1026;
-    --text-secondary: rgba(15, 23, 42, 0.65);
-    --text-muted: rgba(15, 23, 42, 0.5);
-    --accent: #5b6cff;
-    --accent-strong: #3f52ff;
-    --accent-soft: rgba(91, 108, 255, 0.12);
-    --accent-gradient: linear-gradient(120deg, #5b6cff, #8f7bff);
+    --text-secondary: rgba(15, 23, 42, 0.78);
+    --text-muted: rgba(15, 23, 42, 0.62);
+    --accent: #2563eb;
+    --accent-strong: #1d4ed8;
+    --accent-soft: rgba(37, 99, 235, 0.10);
+    --accent-gradient: linear-gradient(120deg, #1d4ed8, #2563eb);
     --success: #1bbf83;
     --danger: #ef4444;
     --radius-large: 28px;
@@ -43,9 +43,9 @@ body {
 .background-glow {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle at 20% 30%, rgba(91, 108, 255, 0.25), transparent 55%),
-        radial-gradient(circle at 80% 0%, rgba(31, 190, 255, 0.22), transparent 50%),
-        radial-gradient(circle at 50% 100%, rgba(255, 179, 71, 0.15), transparent 55%);
+    background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.12), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.10), transparent 50%),
+        radial-gradient(circle at 50% 100%, rgba(148, 163, 184, 0.10), transparent 55%);
     filter: blur(0px);
     opacity: 0.6;
     z-index: -2;
@@ -56,8 +56,8 @@ body {
     top: 0;
     z-index: 40;
     backdrop-filter: blur(18px);
-    background: linear-gradient(180deg, rgba(246, 247, 251, 0.82), rgba(246, 247, 251, 0.62));
-    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.82));
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .header-container {
@@ -175,19 +175,19 @@ body {
 .nav-link:hover,
 .nav-link:focus-visible {
     color: var(--text-primary);
-    background: rgba(91, 108, 255, 0.08);
+    background: rgba(37, 99, 235, 0.08);
 }
 
 .nav-link--contrast {
     background: var(--accent-gradient);
     color: white;
-    box-shadow: 0 15px 35px rgba(91, 108, 255, 0.35);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
 }
 
 .nav-link--contrast:hover,
 .nav-link--contrast:focus-visible {
     transform: translateY(-1px);
-    box-shadow: 0 20px 40px rgba(91, 108, 255, 0.42);
+    box-shadow: 0 16px 32px rgba(37, 99, 235, 0.26);
 }
 
 .page-content {
@@ -217,7 +217,7 @@ body {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     pointer-events: none;
     opacity: 0.55;
 }
@@ -336,7 +336,7 @@ select:focus,
 textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(91, 108, 255, 0.18);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16);
     transform: translateY(-1px);
 }
 
@@ -364,7 +364,7 @@ button,
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 18px 38px rgba(91, 108, 255, 0.35);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.24);
     transition: transform 0.2s var(--transition-default), box-shadow 0.2s var(--transition-default);
 }
 
@@ -373,7 +373,7 @@ button:hover,
 button:focus-visible,
 .button:focus-visible {
     transform: translateY(-2px);
-    box-shadow: 0 22px 45px rgba(91, 108, 255, 0.4);
+    box-shadow: 0 16px 34px rgba(37, 99, 235, 0.28);
 }
 
 button:disabled {
@@ -398,8 +398,8 @@ button:disabled {
 .site-footer {
     margin-top: auto;
     padding: 36px 24px 48px;
-    background: rgba(246, 247, 251, 0.88);
-    border-top: 1px solid rgba(15, 23, 42, 0.06);
+    background: rgba(248, 250, 252, 0.94);
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .footer-container {
