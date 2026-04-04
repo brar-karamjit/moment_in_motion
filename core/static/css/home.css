@@ -202,10 +202,46 @@
 
 /* hello service UI */
 .hello-section {
-    margin-top: 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.service-check-card {
+    margin-top: 4px;
+}
+
+.architecture-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.architecture-copy {
+    display: grid;
+    gap: 8px;
+}
+
+.architecture-copy h2 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.architecture-copy p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.architecture-flow {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 10px;
+    color: var(--text-primary);
+}
+
+.architecture-flow li {
+    line-height: 1.5;
 }
 
 .hello-header {
@@ -394,5 +430,9 @@
     #temperature {
         padding: 20px;
         min-height: 130px;
+    }
+
+    .architecture-flow {
+        padding-left: 16px;
     }
 }

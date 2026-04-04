@@ -16,13 +16,13 @@
     {% with user.first_name|default:"Explorer" as first_name %}
     <h1>Hello, {{ first_name }}.</h1>
     {% endwith %}
-    <p>ßite-sized inspiration you can act on right away.</p>
+    <p>Bite-sized inspiration you can act on right away.</p>
 </section>
 
 <section class="home-grid">
     <article class="card weather-card">
         <div class="weather-header">
-            <span class="weather-title">Right now outdoors</span>
+            <span class="weather-title">Environment Snapshot</span>
             <span class="location-pill"><span aria-hidden="true">📍</span><span id="location-label">Locating…</span></span>
         </div>
         <div id="temperature">
@@ -46,8 +46,8 @@
 
     <article class="card insights-card">
         <div class="insights-copy">
-            <h2>Spark something now</h2>
-            <p>Press the button to see your next move.</p>
+            <h2>Recommendation Engine</h2>
+            <p>Generate your next activity from current weather and profile context.</p>
         </div>
 
         <form method="post" class="insights-form">
@@ -72,19 +72,33 @@
                 </div>
             {% endif %}
         </div>
-
-        <!-- hello service button -->
-        <div class="hello-section">
-            <div class="hello-header">
-                <span class="hello-title">Cross-app check</span>
-                <span class="hello-pill">Istio demo</span>
-            </div>
-            <button id="call-hello" class="insights-button hello-button">
-                Call Hello Service
-            </button>
-            <div id="hello-result" class="hello-output"></div>
-        </div>
     </article>
+</section>
+
+<section class="card service-check-card">
+    <div class="hello-section">
+        <div class="hello-header">
+            <span class="hello-title">Service Health Check</span>
+            <span class="hello-pill">Istio demo</span>
+        </div>
+        <button id="call-hello" class="insights-button hello-button">
+            Call Hello Service
+        </button>
+        <div id="hello-result" class="hello-output"></div>
+    </div>
+</section>
+
+<section class="card architecture-card">
+    <div class="architecture-copy">
+        <h2>Architecture Summary</h2>
+        <p>Current request flow used in this demo deployment.</p>
+    </div>
+    <ul class="architecture-flow">
+        <li>Browser geolocation acquires latitude and longitude.</li>
+        <li>Weather endpoint fetches live conditions from weather-service.</li>
+        <li>Recommendation action posts weather context and user metadata.</li>
+        <li>Cross-app probe verifies mesh routing through /hello endpoint.</li>
+    </ul>
 </section>
 {% endblock %}
 
